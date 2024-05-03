@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Ada3D: Exploiting the Spatial Redundancy with Adaptive Inference for Efficient 3D Object Detection">
+  <meta name="keywords" content="3D Detection, Adaptive Inference, Efficent Deep Learning ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ada3D: Exploiting the Spatial Redundancy with Adaptive Inference for Efficient 3D Object Detection</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+<!-- 
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav> -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Ada3D: Exploiting the Spatial Redundancy with Adaptive Inference for Efficient 3D Object Detection</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TianchenZhao">Tianchen Zhao</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/XuefeiNing">Xuefei Ning</a><sup>1*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/KeHong">Ke Hong</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.novauto.com.cn/">Zhongyuan Qiu</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/PuLu">Pu Lu</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.novauto.com.cn/">Yali Zhao</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              Linfeng Zhang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              Lipu Zhou</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/GuohaoDai">Guohao Dai</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              Huazhong Yang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.novauto.com.cn/">Yu Wang</a><sup>1*</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Tsinghua University,</span>
+            <span class="author-block"><sup>2</sup>Novauto</span>
+            <span class="author-block"><sup>3</sup>Meituan</span>
+            <span class="author-block"><sup>3</sup>Shanghai Jiao Tong University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2F483f5379-b857-4cb2-b114-caaa366deaad.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2307.08209"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Sides Link. -->
+              <span class="link-block">
+                <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fa3462020-25d8-436c-993f-7aaf047cbd93.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-alt"></i>
+                  </span>
+                  <span>Slides</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/A-suozhang/Ada3D"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- [The Teaser Video Exmaple] -->
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop height="100%">
+        <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div>
+  </div>
+</section> -->
+
+<!-- 
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+
+  <div class="container is-max-desktop">
+
+    <!--/ Poster. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Poster</h2>
+        <div class="publication-poster">
+          <img src="./static/src/poster.png"
+            class="poster"
+            lt="Poster."/>
+            <!-- <embed src="./static/src/poster.pdf" width="1600px" height="900px" /> -->
+        <!-- </div>
+      </div>
+    </div> 
+    <!--/ Video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-poster">
+          <iframe width="1080" height="720" src="https://www.youtube.com/embed/N_llpMqMJbk?si=C38fAW1gYxCQFtLc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <!-- <embed src="./static/src/poster.pdf" width="1600px" height="900px" /> -->
+        <!-- </div>
+      </div>
+    </div> 
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Voxel-based methods have achieved state-of-the-art performance for 3D object detection in autonomous driving. However, their <b>significant computational and memory costs</b> pose a challenge for their application to resource-constrained vehicles. 
+          </p>
+          <p>
+            While current efficient 3D perception methods mainly focus on <b>"model-level redundancy"</b>. We discover that one reason for this high resource consumption is the presence of a large number of redundant background points in Lidar point clouds, resulting in <b>"data-level spatial redundancy"</b> in both 3D voxel and BEV map representation.
+          </p>
+          <p>
+            To address this issue, we propose an <b>adaptive inference framework - Ada3D</b>, which focuses on reducing the spatial redundancy to compress the model’s computational and memory cost. Ada3D adaptively filters the
+            redundant input, guided by a lightweight importance predictor and the unique properties of the Lidar point cloud.
+            Additionally, we maintain the BEV features’ intrinsic sparsity by introducing sparsity-preserving batch normalization.
+          </p>
+          <p>
+            With Ada3D, we achieve <b>40% reduction for 3D
+            voxels</b> and decrease the density of 2D BEV feature maps
+            <b>from 100% to 20%</b> without sacrificing accuracy. Ada3D
+            reduces the model computational and memory cost by 5×,
+            and achieves <b>1.52× / 1.45× end-to-end GPU latency</b> and
+            <b>1.5× / 4.5× GPU peak memory</b> optimization for the 3D
+            and 2D backbone respectively.
+          </p>
+        </div>
+      </div>
+    </div>
+        <!--/ Teaser. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3">Teaser</h2>
+            <div class="publication-teaser">
+              <img src="./static/src/teaser.png"
+                class="teaser"
+                lt="Teaser."/>
+                <!-- <embed src="./static/src/teaser.png" width="1600px" height="900px" /> -->
+            </div>
+          </div>
+        </div>
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="src.mp4"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <!-- Motivation. -->
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Motivation</h2>
+
+        <!-- Generalization. -->
+        <h3 class="title is-4">Data-level Spatial Redundancy</h3>
+        <div class="content has-text-justified">
+          <p>
+            Lidar-based 3D point cloud have many redundant background points (e.g., road surface and wall), and overdense points. The 2D BEV feature is projected from 3D sparse voxels, therefore a large portion of pixels in BEV are background zero features. We conduct oracle experiments to verify the spatial redundancy. Randomly dropping 30% input voxels result in less than 0.5 mAP loss, Dropping 70% voxels out of ground-truth bounding box incurs negligible performance loss. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/oracle.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          width="1600px" height="600px"/>
+        </div>
+        <!-- <div class="columns is-vcentered interpolation-panel">
+          <div class="column is-3 has-text-centered">
+            <img src="./static/src/motivation.png"
+                  class="interpolation-image"
+                  alt="Interpolate start reference image."/>
+          </div>
+        </div> -->
+        <br/>
+        <!--/ Generalization. -->
+      </div>
+    </div>
+  <!--/ Motivation. -->
+  </div>
+</div>
+<section class="section">
+  <!-- Motivation. -->
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Methodology</h2>
+        The overall framework of Ada3D consists of 3 key components. 
+
+        <div class="content has-text-centered">
+          <img src="./static/src/flow.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          width="1600px" height="600px"/>
+        </div>
+
+        <!-- Generalization. -->
+        <h3 class="title is-4">Importance Predictor</h3>
+        <div class="content has-text-justified">
+          <p>
+            We design a lightweight shared BEV space importance predictor that maps the input feature to pixel-wise relative importance. It's trained to fit the center-based heatmap.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/predictor.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          width="1600px" height="600px"/>
+        </div>
+        <br/>
+        <!--/ Generalization. -->
+
+        <!-- Generalization. -->
+        <h3 class="title is-4">Density-guided Spatial Filtering</h3>
+        <div class="content has-text-justified">
+          <p>
+            Lidar point cloud has the special property of density imbalance. The point cloud closer to the sensor is denser while the remote parts are sparse. The predictor tends to produce larger prediction for local parts, to compensate it, We introduce density-guidance for spatial filtering decision. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/density.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          width="1600px" height="600px"/>
+        </div>
+        <br/>
+        <!--/ Generalization. -->
+
+        <!-- Generalization. -->
+        <h3 class="title is-4">Sparsity-preserving Batch Normalization</h3>
+        <div class="content has-text-justified">
+          <p>
+            The 2D BEV feature have a large portion of zero features, thus having large sparsity. However, the sparsity is lost after the first batch normalization. Applying BN to nonzero elements only will violate the relative feature relation and brings traininig instability during finetuning. To preserve the sparsity for 2D feature map, we introduce the sparsity-preserving BN. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/spbn.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          width="800px" height="400px"/>
+        </div>
+        <br/>
+        <!--/ Generalization. -->
+                
+      </div>
+    </div>
+  <!--/ Motivation. -->
+  </div>
+</div>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Experiments and Analysis</h2>
+          <!-- Perf. -->
+          <h3 class="title is-4">Performance</h3>
+          <div class="content has-text-justified">
+            <p>
+              We presents the performance and model-level metrics on KITTI dataset: 
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="./static/src/exp-kitti.png"
+            class="exp-image"
+            alt="Experimental Results Image."/>
+          </div>
+          <div class="content has-text-centered">
+            <img src="./static/src/kitti-detail.png"
+            class="exp-image"
+            alt="Experimental Results Image."/>
+          </div>
+        <!--/ Perf. -->
+        <!-- AttnMap. -->
+        <h3 class="title is-4">Hardware Experiments</h3>
+        <div class="content has-text-justified">
+          <p>
+            We further conduct hardware experiments to demonstrate the actual speedup of Ada3D. The results are generated on RTX3090 with CUDA-11.1, SpConv v2.2.6 gather-scatter dataflow. We found that both the 3D and 2D part of 3D detectors require acceleration, and they have different acceleration rate. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/analysis-hardware.png"
+          class="geo-vis"
+          alt="Attention map visualization."/>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/bars.png"
+          class="geo-vis"
+          alt="Attention map visualization."/>
+        </div>
+        <!--/ AttnMap. -->
+        <!-- Geo-vis. -->
+        <h3 class="title is-4">Qualitative Results</h3>
+        <div class="content has-text-justified">
+          <p>
+          </p>
+        </div>
+        <h3 class="title is-5">Comparison with other compression methods</h3>
+        <div class="content has-text-justified">
+          <p>
+            Ada3D accelerates both the 3D and 2D backbone of 3D detector (some methods accelrates one of which only). Also, it could be combined with model-level compression methods (e,g, SPVNAS, VoxelNeXT).  
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/comparison.png"
+          class="geo-vis"
+          alt="Attention map visualization."/>
+        </div>
+        <h3 class="title is-5">Ablation studies</h3>
+        <div class="content has-text-justified">
+          <p>
+            Ablation studies is conducted to show the effectiveness of each techniques. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/ablation.png"
+          class="geo-vis"
+          alt="Attention map visualization."/>
+        </div>
+        <h3 class="title is-5">Effectiveness of Ada3D</h3>
+        <div class="content has-text-justified">
+          <p>
+            The below visualizations demonstrate the effectiveness of Ada3D. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/analysis-heatmap.png"
+          class="geo-vis"
+          alt="Attention map visualization."/>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/analysis-drop.png"
+          class="geo-vis"
+          alt="Visualization of geometry."/>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/analysis-density.png"
+          class="geo-vis"
+          alt="Visualization of geometry."/>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{Zhao2023Ada3DE,
+      title={Ada3D : Exploiting the Spatial Redundancy with Adaptive Inference for Efficient 3D Object Detection},
+      author={Tianchen Zhao and Xuefei Ning and Ke Hong and Zhongyuan Qiu and Pu Lu and Yali Zhao and Linfeng Zhang and Lipu Zhou and Guohao Dai and Huazhong Yang and Yu Wang},
+      journal={ArXiv},
+      year={2023},
+      volume={abs/2307.08209},
+      url={https://api.semanticscholar.org/CorpusID:259937318}
+    }</code></pre>
+  </div>
+  <div class="content has-text-centered">
+    <img src="./static/src/pr.png"
+    class="geo-vis"
+    alt="Attention map visualization."/>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/abs/2307.08209">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/A-suozhang/ada3d" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
