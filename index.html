@@ -88,7 +88,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">MixDQ: Memory-Efficient Few-Step  Text-to-Image Diffusion Models with Metric-Decoupled Mixed Precision Quantization</h1>
+          <h1 class="title is-2 publication-title">MixDQ: Memory-Efficient Few-Step  Text-to-Image Diffusion Models with Metric-Decoupled Mixed Precision Quantization</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TianchenZhao">Tianchen Zhao</a><sup>1,2*</sup>,</span>
@@ -105,10 +105,10 @@
               <a href="https://hgyhungry.github.io/">Guyue Huang</a><sup>3</sup>,
             </span>
             <span class="author-block">
-              <a href="https://www.microsoft.com/en-us/research/people/zinanlin/"> </a>Zinan Lin</a><sup>4</sup>,
+              <a href="https://www.microsoft.com/en-us/research/people/zinanlin/">Zinan Lin</a><sup>4</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=SvE3bdUAAAAJ&hl=en"></a>Shengen Yan</a><sup>2</sup>,
+              <a href="https://scholar.google.com/citations?user=SvE3bdUAAAAJ&hl=en">Shengen Yan</a><sup>2</sup>,
             </span>
             <span class="author-block">
               <a href="https://dai.sjtu.edu.cn/pepledetail.html?id=218">Guohao Dai</a><sup>5</sup>,
@@ -122,7 +122,7 @@
             <span class="author-block"><sup>1</sup>Tsinghua University,</span>
             <span class="author-block"><sup>2</sup>Infinigence AI</span>
             <span class="author-block"><sup>3</sup>University of California Santa Barbara</span>
-            <span class="author-block"><sup>4</sup>MicroSoft</span>
+            <span class="author-block"><sup>4</sup>Microsoft</span>
             <span class="author-block"><sup>5</sup>Shanghai Jiao Tong University</span>
           </div>
 
@@ -279,46 +279,41 @@
         <!-- </div>
       </div>
     </div> 
+      <!--/ Teaser. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Teaser</h2>
+          <div class="publication-teaser">
+            <img src="./static/src/teaser.png"
+              class="teaser"
+              lt="Teaser."
+              style="width: 90%"
+              />
+              <!-- <embed src="./static/src/teaser.png" width="1600px" height="900px" /> -->
+          </div>
+        </div>
+      </div>
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Voxel-based methods have achieved state-of-the-art performance for 3D object detection in autonomous driving. However, their <b>significant computational and memory costs</b> pose a challenge for their application to resource-constrained vehicles. 
+            Diffusion models have achieved significant visual generation quality. However, their <b>significant computational and memory costs</b> pose challenge for their application on resource-constrained mobile devices or even desktop GPUs. Recent <b>few-step diffusion models</b> reduces the inference time by reducing the denoising steps. However, their memory consumptions are still excessive. 
           </p>
           <p>
-            While current efficient 3D perception methods mainly focus on <b>"model-level redundancy"</b>. We discover that one reason for this high resource consumption is the presence of a large number of redundant background points in Lidar point clouds, resulting in <b>"data-level spatial redundancy"</b> in both 3D voxel and BEV map representation.
+            The <b>Post Training Quantization (PTQ)</b> replaces high bit-width FP representation with low-bit integer values (INT4/8) , which is an effective and efficient technique to reduce the memory cost. However, when applying to few-step diffusion models, existing quantization methods <b>face challenges in preserving both the image quality and text alignment</b>. 
           </p>
           <p>
-            To address this issue, we propose an <b>adaptive inference framework - Ada3D</b>, which focuses on reducing the spatial redundancy to compress the model’s computational and memory cost. Ada3D adaptively filters the
-            redundant input, guided by a lightweight importance predictor and the unique properties of the Lidar point cloud.
-            Additionally, we maintain the BEV features’ intrinsic sparsity by introducing sparsity-preserving batch normalization.
+            To address this issue, we propose an <b>mixed-precision quantization framework - MixDQ</b>. Firstly, We design specialized BOS-aware quantization method for highly sensitive text embedding quantization. Then, we conduct metric-decoupled sensitivity analysis to measure the sensitivity of each layer. Finally, we develop an integer-programming-based method to conduct bit-width allocation. 
           </p>
           <p>
-            With Ada3D, we achieve <b>40% reduction for 3D
-            voxels</b> and decrease the density of 2D BEV feature maps
-            <b>from 100% to 20%</b> without sacrificing accuracy. Ada3D
-            reduces the model computational and memory cost by 5×,
-            and achieves <b>1.52× / 1.45× end-to-end GPU latency</b> and
-            <b>1.5× / 4.5× GPU peak memory</b> optimization for the 3D
-            and 2D backbone respectively.
+            While existing quantization methods fall short at W8A8, MixDQ could achieve <b>W8A8 without performance loss</b>, and <b>W4A8 with negligible visual degradation</b>. Compared with FP16, we achieve <b>3-4x</b> reduction in model size and memory cost, and <b>1.45x</b> latency speedup. 
           </p>
         </div>
       </div>
     </div>
-        <!--/ Teaser. -->
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-full-width">
-            <h2 class="title is-3">Teaser</h2>
-            <div class="publication-teaser">
-              <img src="./static/src/teaser.png"
-                class="teaser"
-                lt="Teaser."/>
-                <!-- <embed src="./static/src/teaser.png" width="1600px" height="900px" /> -->
-            </div>
-          </div>
-        </div>
+
 
     <!-- Paper video. -->
     <!-- <div class="columns is-centered has-text-centered">
@@ -343,25 +338,31 @@
         <h2 class="title is-3">Motivation</h2>
 
         <!-- Generalization. -->
-        <h3 class="title is-4">Data-level Spatial Redundancy</h3>
+        <h3 class="title is-4">Challenges for Quantizing Few-step Diffusion Models</h3>
         <div class="content has-text-justified">
           <p>
-            Lidar-based 3D point cloud have many redundant background points (e.g., road surface and wall), and overdense points. The 2D BEV feature is projected from 3D sparse voxels, therefore a large portion of pixels in BEV are background zero features. We conduct oracle experiments to verify the spatial redundancy. Randomly dropping 30% input voxels result in less than 0.5 mAP loss, Dropping 70% voxels out of ground-truth bounding box incurs negligible performance loss. 
+            We empirically discover that the few-step diffusion models are more sensitive to quantization compared with multi-step diffusion models, and prior diffusion quantization methods faces challenges. Q-diffusion W8A8 quantized model faces severe <b>quality degradation</b> under few-steps. Also, even with multi-step model, quantization harms the <b>text-image alignment</b>. 
           </p>
         </div>
         <div class="content has-text-centered">
-          <img src="./static/src/oracle.png"
+          <img src="./static/src/quant_problem.png"
           class="exp-image"
           alt="Experimental Results Image."
-          width="1600px" height="600px"/>
+          style="width: 75%"/>
         </div>
-        <!-- <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/src/motivation.png"
-                  class="interpolation-image"
-                  alt="Interpolate start reference image."/>
-          </div>
-        </div> -->
+        <h3 class="title is-4">Preliminary Experiments: Reasons for Quantization Failure</h3>
+        <div class="content has-text-justified">
+          <p>
+            We conduct preliminary experiments to delve into the reasons for quantization failure, and discover two insightful findings: (1) The quantization are "bottlenecked" by some highly sensitive layers. (2) Quantizing different part of the model affects generated image quality and content repsectively. 
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/src/quant_fail_error.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 90%"/>
+        </div>
+
         <br/>
         <!--/ Generalization. -->
       </div>
@@ -375,62 +376,60 @@
     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Methodology</h2>
-        The overall framework of Ada3D consists of 3 key components. 
+        To overcome the above challenges, inspired by the above findings, we design <b>MixDQ</b>, a mixed-precision quantization framework:
 
         <div class="content has-text-centered">
-          <img src="./static/src/flow.png"
+          <img src="./static/src/mixdq_method.png"
           class="exp-image"
           alt="Experimental Results Image."
-          width="1600px" height="600px"/>
+          style="width: 100%"/>
         </div>
 
         <!-- Generalization. -->
-        <h3 class="title is-4">Importance Predictor</h3>
+        <h3 class="title is-4">BOS-aware Text Embedding Quantization</h3>
         <div class="content has-text-justified">
           <p>
-            We design a lightweight shared BEV space importance predictor that maps the input feature to pixel-wise relative importance. It's trained to fit the center-based heatmap.
+            We discover that the 1st token of the CLIP text embedding is the outlier that hinders quantization. Further, we notice that the first token is the <b>Begin-Of-Sentence (BOS) token</b> that remains the same for different prompts. Therefore, we could pre-compute it  offline and skip its quantization. 
           </p>
         </div>
-        <div class="content has-text-centered">
-          <img src="./static/src/predictor.png"
+        <!-- <div class="content has-text-centered">
+          <img src="./static/src/bos_aware.png"
           class="exp-image"
           alt="Experimental Results Image."
-          width="1600px" height="600px"/>
+          style="width: 100%"/>
         </div>
-        <br/>
+        <br/> -->
         <!--/ Generalization. -->
 
         <!-- Generalization. -->
-        <h3 class="title is-4">Density-guided Spatial Filtering</h3>
+        <h3 class="title is-4">Metric-Decoupled Sensitivity Analysis</h3>
         <div class="content has-text-justified">
           <p>
-            Lidar point cloud has the special property of density imbalance. The point cloud closer to the sensor is denser while the remote parts are sparse. The predictor tends to produce larger prediction for local parts, to compensate it, We introduce density-guidance for spatial filtering decision. 
+            When simply remaining the layers that causes the most quantization error FP16, we discover that the generated image still faces quality degradation, denoting <b>existing quantization sensitivity analysis's accuracy needs improving</b>. Inspired by the quantization's affects on image quality and textual alignmet, we design a Metric-Decoupled Sensitivity Analysis method. We seperate the layers into 2 groups, and conduct sensitivity analysis with distinct metrics repsectively for them. 
           </p>
         </div>
-        <div class="content has-text-centered">
+        <!-- <div class="content has-text-centered">
           <img src="./static/src/density.png"
           class="exp-image"
           alt="Experimental Results Image."
           width="1600px" height="600px"/>
-        </div>
+        </div> -->
         <br/>
-        <!--/ Generalization. -->
-
-        <!-- Generalization. -->
-        <h3 class="title is-4">Sparsity-preserving Batch Normalization</h3>
+        <h3 class="title is-4">Integer-Programming-based Bit-width Allocation</h3>
         <div class="content has-text-justified">
           <p>
-            The 2D BEV feature have a large portion of zero features, thus having large sparsity. However, the sparsity is lost after the first batch normalization. Applying BN to nonzero elements only will violate the relative feature relation and brings traininig instability during finetuning. To preserve the sparsity for 2D feature map, we introduce the sparsity-preserving BN. 
+            After acquiring the quantization sensitivity, we formulate the bit-width allocation problem into an integer-programming method, and adopt off-the-shelf solver to efficiently solve them. 
           </p>
         </div>
-        <div class="content has-text-centered">
+        <!-- <div class="content has-text-centered">
           <img src="./static/src/spbn.png"
           class="exp-image"
           alt="Experimental Results Image."
           width="800px" height="400px"/>
-        </div>
+        </div> -->
         <br/>
         <!--/ Generalization. -->
+        <br/>
                 
       </div>
     </div>
@@ -441,91 +440,75 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Experiments and Analysis</h2>
+          <h2 class="title is-3"> Experiments and Analysis:  </h2>
           <!-- Perf. -->
-          <h3 class="title is-4">Performance</h3>
+          <h3 class="title is-4"> 🖼️  Generation Quality</h3>
           <div class="content has-text-justified">
             <p>
-              We presents the performance and model-level metrics on KITTI dataset: 
+              We present the performance of MixDQ on COCO text-to-image task. We choose multiple metrics that reflect different aspect of the generated images. The FID for image fidelity (quality), the CLIPScore for textual alignment, and the ImageReward for human preference. MixDQ could achieve W8A8 without performance loss. With just 0.1/0.5 FID increase, MixDQ could achivee W5A8/W4A8. At the same time, the baseline quantization methods fall short at W8A8 (60 FID increase, negative ImageReward).   
             </p>
           </div>
           <div class="content has-text-centered">
-            <img src="./static/src/exp-kitti.png"
+            <img src="./static/src/mixdq_main_result.png"
             class="exp-image"
-            alt="Experimental Results Image."/>
+            alt="Experimental Results Image."
+            style="width: 70%"/>  
           </div>
+            <p>
+              We present some qualitative results that relates the statistical metric values with generated image. As could be seen, compared with Q-Diffusion and naive minmax quantization. MixDQ-W4A8 could generate image nearly identical with the FP image, while other methods fail to produce readable image for W8A8. 
+            </p>
           <div class="content has-text-centered">
-            <img src="./static/src/kitti-detail.png"
+            <img src="./static/src/mixdq_line_plot.png"
             class="exp-image"
-            alt="Experimental Results Image."/>
+            alt="Experimental Results Image."
+            style="width: 80%"/>  
           </div>
         <!--/ Perf. -->
         <!-- AttnMap. -->
-        <h3 class="title is-4">Hardware Experiments</h3>
+        <h3 class="title is-4"> 🧭 Efficiency Improvement</h3>
         <div class="content has-text-justified">
           <p>
-            We further conduct hardware experiments to demonstrate the actual speedup of Ada3D. The results are generated on RTX3090 with CUDA-11.1, SpConv v2.2.6 gather-scatter dataflow. We found that both the 3D and 2D part of 3D detectors require acceleration, and they have different acceleration rate. 
+            We test the efficiency improvement of MixDQ quantization with hardware profiling. As could be seen, MixDQ could achive 3-4x memory compression rate, and 1.4-1.6x latency speedup with W4A8. 
           </p>
         </div>
         <div class="content has-text-centered">
-          <img src="./static/src/analysis-hardware.png"
+          <img src="./static/src/mixdq_hardware_stats.png"
           class="geo-vis"
           alt="Attention map visualization."/>
         </div>
+        <h3 class="title is-4"> 🤗 Open-Source Demo</h3>
+          <p>
+            We implement efficient INT8 GPU kernel implementation for practical hardware acceleration on GPU. We present MixDQ model's  huggingface pipeline, which could be efficiently called with a few lines of codes. It achives 2x model size reduction, and 1.45x end-to-end latency speedup. 
+          </p>
         <div class="content has-text-centered">
-          <img src="./static/src/bars.png"
+          <img src="./static/src/demo_mixdq_pipeline.png"
           class="geo-vis"
           alt="Attention map visualization."/>
+        </div>
+        <p>
+          Compared with other existing diffusion model quantization tools. Only the closed-form TensorRT INT8 implementation achieves practical latency speedup. MixDQ is the 1st to achieve practical memory and latency optimization for few-step diffusion models, enabling "tiny and fast" image generation. 
+        </p>
+        <div class="content has-text-centered">
+          <img src="./static/src/comparison_quant_deploy2.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 80%"/>
         </div>
         <!--/ AttnMap. -->
+        <h3 class="title is-4">Ablation Studies</h3>
+        <div class="content has-text-centered">
+          <img src="./static/src/mixdq_ablation.png"
+          class="exp-image"
+          alt="Experimental Results Image."
+          style="width: 80%"/>
+        </div>
         <!-- Geo-vis. -->
         <h3 class="title is-4">Qualitative Results</h3>
-        <div class="content has-text-justified">
-          <p>
-          </p>
-        </div>
-        <h3 class="title is-5">Comparison with other compression methods</h3>
-        <div class="content has-text-justified">
-          <p>
-            Ada3D accelerates both the 3D and 2D backbone of 3D detector (some methods accelrates one of which only). Also, it could be combined with model-level compression methods (e,g, SPVNAS, VoxelNeXT).  
-          </p>
-        </div>
         <div class="content has-text-centered">
-          <img src="./static/src/comparison.png"
+          <img src="./static/src/mixdq_qualitatives.png"
           class="geo-vis"
-          alt="Attention map visualization."/>
-        </div>
-        <h3 class="title is-5">Ablation studies</h3>
-        <div class="content has-text-justified">
-          <p>
-            Ablation studies is conducted to show the effectiveness of each techniques. 
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <img src="./static/src/ablation.png"
-          class="geo-vis"
-          alt="Attention map visualization."/>
-        </div>
-        <h3 class="title is-5">Effectiveness of Ada3D</h3>
-        <div class="content has-text-justified">
-          <p>
-            The below visualizations demonstrate the effectiveness of Ada3D. 
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <img src="./static/src/analysis-heatmap.png"
-          class="geo-vis"
-          alt="Attention map visualization."/>
-        </div>
-        <div class="content has-text-centered">
-          <img src="./static/src/analysis-drop.png"
-          class="geo-vis"
-          alt="Visualization of geometry."/>
-        </div>
-        <div class="content has-text-centered">
-          <img src="./static/src/analysis-density.png"
-          class="geo-vis"
-          alt="Visualization of geometry."/>
+          alt="Attention map visualization."
+          style="width: 80%"/>
         </div>
       </div>
     </div>
@@ -543,11 +526,11 @@
       url={https://api.semanticscholar.org/CorpusID:259937318}
     }</code></pre>
   </div>
-  <div class="content has-text-centered">
+  <!-- <div class="content has-text-centered">
     <img src="./static/src/pr.png"
     class="geo-vis"
     alt="Attention map visualization."/>
-  </div>
+  </div> -->
 </section>
 
 
