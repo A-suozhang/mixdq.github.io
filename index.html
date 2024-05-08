@@ -88,7 +88,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-2 publication-title">MixDQ: Memory-Efficient Few-Step  Text-to-Image Diffusion Models with Metric-Decoupled Mixed Precision Quantization</h1>
+          <h1 class="title is-2 publication-title"> <img src="./static/images/favicon.svg" style="width: 2em" /> MixDQ: Memory-Efficient Few-Step  Text-to-Image Diffusion Models with Metric-Decoupled Mixed Precision Quantization</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TianchenZhao">Tianchen Zhao</a><sup>1,2*</sup>,</span>
@@ -96,7 +96,7 @@
               <a href="https://nicsefc.ee.tsinghua.edu.cn/people/XuefeiNing">Xuefei Ning</a><sup>1*</sup>,
             </span>
             <span class="author-block">
-              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TongchengFang">Tongcheng fang</a><sup>1,2*</sup>,
+              <a href="https://nicsefc.ee.tsinghua.edu.cn/people/TongchengFang">Tongcheng Fang</a><sup>1,2*</sup>,
             </span>
             <span class="author-block">
               <a href="https://nicsefc.ee.tsinghua.edu.cn/people/EnshuLiu">Enshu Liu</a><sup>1</sup>,
@@ -128,8 +128,9 @@
 
           <div class="column has-text-centered">
             <div class="publication-links">
+
               <!-- PDF Link. -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2F483f5379-b857-4cb2-b114-caaa366deaad.pdf"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -137,7 +138,7 @@
                   </span>
                   <span>Paper</span>
                 </a>
-              </span>
+              </span> -->
               <!-- <span class="link-block">
                 <a href="https://arxiv.org/abs/2307.08209"
                    class="external-link button is-normal is-rounded is-dark">
@@ -148,7 +149,7 @@
                 </a>
               </span> -->
               <!-- Sides Link. -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fa3462020-25d8-436c-993f-7aaf047cbd93.pdf"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -156,7 +157,7 @@
                   </span>
                   <span>Slides</span>
                 </a>
-              </span>
+              </span> -->
               <!-- Code Link. -->
               <!-- <span class="link-block">
                 <a href="https://github.com/A-suozhang/Ada3D"
@@ -164,11 +165,11 @@
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
-                  <span>Code</span>
+                  <span>Code (Coming Soon)</span>
                   </a>
               </span> -->
-            </div>
 
+            </div>
           </div>
         </div>
       </div>
@@ -282,9 +283,20 @@
       <!--/ Teaser. -->
       <div class="columns is-centered has-text-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Teaser</h2>
+          <h2 class="title is-3">TL;DR</h2>
           <div class="publication-teaser">
+            <p>
+              We design MixDQ, a mixed-precision quantization framework that successfully tackles the challenging <b>few-step text-to-image diffusion model quantization</b>. With <b>negligible visual quality degradation and content change</b>, MixDQ could achieve W4A8, with equivalent <b><font color="#b3280d"> 3.4x memory compression and 1.5x latency speedup</font></b>. 
+            </p>
             <img src="./static/src/teaser.png"
+              class="teaser"
+              lt="Teaser."
+              style="width: 90%"
+              />
+              <p>🤗 <b> <font color="#f29a26">Open-Source Huggingface Pipeline🤗: </font></b>  We implement efficient INT8 GPU kernel to achieve <b><font color="#b3280d"> actual GPU acceleration (1.45x) and memory savings (2x)</font></b> for W8A8. We will relase the pipeline soon, for test usage, please contect:
+              <a href= "suozhang1998@gmail.com"> suozhang1998@gmail.com</a>
+              </p>
+              <img src="./static/src/demo_mixdq_pipeline.png"
               class="teaser"
               lt="Teaser."
               style="width: 90%"
@@ -492,7 +504,7 @@
           <img src="./static/src/comparison_quant_deploy2.png"
           class="exp-image"
           alt="Experimental Results Image."
-          style="width: 80%"/>
+          style="width: 90%"/>
         </div>
         <!--/ AttnMap. -->
         <h3 class="title is-4">Ablation Studies</h3>
@@ -514,7 +526,7 @@
     </div>
 </section>
 
-<section class="section" id="BibTeX">
+<!-- <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{Zhao2023Ada3DE,
@@ -525,7 +537,8 @@
       volume={abs/2307.08209},
       url={https://api.semanticscholar.org/CorpusID:259937318}
     }</code></pre>
-  </div>
+  </div> -->
+
   <!-- <div class="content has-text-centered">
     <img src="./static/src/pr.png"
     class="geo-vis"
@@ -536,7 +549,7 @@
 
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
+    <!-- <div class="content has-text-centered">
       <a class="icon-link"
          href="https://arxiv.org/abs/2307.08209">
         <i class="fas fa-file-pdf"></i>
@@ -544,7 +557,7 @@
       <a class="icon-link" href="https://github.com/A-suozhang/ada3d" class="external-link" disabled>
         <i class="fab fa-github"></i>
       </a>
-    </div>
+    </div> -->
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
